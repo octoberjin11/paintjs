@@ -5,6 +5,7 @@ const ctx = canvas.getContext("2d"); //HTMLCanvasElement.getContext() 메소드�
 const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
+const reset = document.getElementById("jsReset");
 
 const INITIAL_COLOR = "#2c2c2c";
 const canvasWidth = canvas.offsetWidth;
@@ -93,6 +94,10 @@ function handleCanvasClick() {
   }
 }
 
+function resetBtn() {
+  window.location.reload();
+}
+
 if (canvas) {
   canvas.addEventListener("mousemove", onMouseMove); //마우스 움직임 감지
   canvas.addEventListener("mousedown", startPainting); //마우스 클릭 감지 (마우스를 클릭하고 있을때)
@@ -113,4 +118,8 @@ if (range) {
 
 if (mode) {
   mode.addEventListener("click", handleModeClick);
+}
+
+if (reset) {
+  reset.addEventListener("click", resetBtn);
 }
