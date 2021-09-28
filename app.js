@@ -6,14 +6,19 @@ const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 
+const INITIAL_COLOR = "#2c2c2c";
+const canvasWidth = canvas.offsetWidth;
+const canvasHeight = canvas.offsetHeight;
+
 //canvas element는 두개의 사이즈를 가져야 한다.
 //1. css 사이즈
 //2. pixel mainpulating 사이즈 (화면에 나타나고 있는 사이즈...?) = pixel modifier 사이즈
 //기본적으로 css로 canvas를 만들지만, 또한 canvas를 pixel을 다룰 수 있는 element로서 만드는 거니까 이 element에 width와 height를 지정해줘야 한다. 픽셀을 다루는 원도우가 얼마나 큰지 canvas에 알려주기 위해서 width와 height 사이즈를 주는것.
-canvas.width = canvas.offsetWidth;
-canvas.height = canvas.offsetHeight;
+canvas.width = canvasWidth;
+canvas.height = canvasHeight;
 
-ctx.strokeStyle = "#2c2c2c"; //그릴 선들의 색
+ctx.strokeStyle = INITIAL_COLOR; //그릴 선들의 색
+ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5; //선의 너비 = 선의 굵기
 
 let painting = false; //그림 그리기 감지
@@ -56,7 +61,8 @@ ctx.stroke(); > 선 그리기
 
 function handleColorClick(event) {
   const color = event.target.style.backgroundColor;
-  ctx.strokeStyle = color;
+  ctx.strokeStyle = color; //선 색
+  ctx.fillStyle = color; //채우기 색
 }
 
 function handleRangeChange(event) {
@@ -75,11 +81,20 @@ function handleModeClick() {
   }
 }
 
+function handleCanvasClick() {
+  //ctx.fillRect(x, y, width, height);
+  //width와 height에 의해서 결정된 사이즈로 (x,y) 위치에 색칠된 사각형을 그림
+  if (filling) {
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+  }
+}
+
 if (canvas) {
   canvas.addEventListener("mousemove", onMouseMove); //마우스 움직임 감지
   canvas.addEventListener("mousedown", startPainging); //마우스 클릭 감지 (마우스를 클릭하고 있을때)
   canvas.addEventListener("mouseup", stopPainting); //마우스 클릭 감지 (마우스를 클릭을 그만뒀을때)
   canvas.addEventListener("mouseleave", stopPainting); //마우스가 컨버스 영역을 벗어났을때 감지
+  canvas.addEventListener("click", handleCanvasClick);
 }
 
 //Array.from 메소드는 object로부터 array를 만든다.
