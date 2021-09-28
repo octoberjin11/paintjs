@@ -3,6 +3,8 @@
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d"); //HTMLCanvasElement.getContext() 메소드는 엘리먼트의 컨텍스트(렌더링될 그리기의 대상)를 얻습니다.
 const colors = document.getElementsByClassName("jsColor");
+const range = document.getElementById("jsRange");
+const mode = document.getElementById("jsMode");
 
 //canvas element는 두개의 사이즈를 가져야 한다.
 //1. css 사이즈
@@ -15,6 +17,7 @@ ctx.strokeStyle = "#2c2c2c"; //그릴 선들의 색
 ctx.lineWidth = 2.5; //선의 너비 = 선의 굵기
 
 let painting = false; //그림 그리기 감지
+let filling = false; //색 채우기 감지
 
 function startPainging() {
   painting = true;
@@ -56,6 +59,22 @@ function handleColorClick(event) {
   ctx.strokeStyle = color;
 }
 
+function handleRangeChange(event) {
+  //브러쉬 사이즈 조절
+  const strokeSize = event.target.value;
+  ctx.lineWidth = strokeSize;
+}
+
+function handleModeClick() {
+  if (filling === true) {
+    filling = false;
+    mode.innerText = "Fill";
+  } else {
+    filling = true;
+    mode.innerText = "Paint";
+  }
+}
+
 if (canvas) {
   canvas.addEventListener("mousemove", onMouseMove); //마우스 움직임 감지
   canvas.addEventListener("mousedown", startPainging); //마우스 클릭 감지 (마우스를 클릭하고 있을때)
@@ -68,3 +87,11 @@ Array.from(colors).forEach(
   (changeColor) => changeColor.addEventListener("click", handleColorClick)
   //changeColor라는 이름은 array 안의 각각의 아이템들을 대표하는것이기 때문에 어떤 이름으로 사용하든 상관없다.
 );
+
+if (range) {
+  range.addEventListener("input", handleRangeChange);
+}
+
+if (mode) {
+  mode.addEventListener("click", handleModeClick);
+}
