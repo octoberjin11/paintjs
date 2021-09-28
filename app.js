@@ -24,9 +24,13 @@ ctx.lineWidth = 2.5; //선의 너비 = 선의 굵기
 let painting = false; //그림 그리기 감지
 let filling = false; //색 채우기 감지
 
-function startPainging() {
-  painting = true;
-}
+const startPainting = (event) => {
+  //filling mode에서 클릭하고 드래그하면 잠시 동안 paing(stroke)되고, 마우스 떼었을 때야 비러소 fill이 되는 현상 해결
+  //filling === false일 때만 painting이 true가 되도록 startPainting 콜백함수 변경
+  if (filling === false) {
+    painting = true;
+  }
+};
 
 function stopPainting() {
   painting = false;
@@ -91,7 +95,7 @@ function handleCanvasClick() {
 
 if (canvas) {
   canvas.addEventListener("mousemove", onMouseMove); //마우스 움직임 감지
-  canvas.addEventListener("mousedown", startPainging); //마우스 클릭 감지 (마우스를 클릭하고 있을때)
+  canvas.addEventListener("mousedown", startPainting); //마우스 클릭 감지 (마우스를 클릭하고 있을때)
   canvas.addEventListener("mouseup", stopPainting); //마우스 클릭 감지 (마우스를 클릭을 그만뒀을때)
   canvas.addEventListener("mouseleave", stopPainting); //마우스가 컨버스 영역을 벗어났을때 감지
   canvas.addEventListener("click", handleCanvasClick);
