@@ -6,6 +6,7 @@ const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 const reset = document.getElementById("jsReset");
+const saveBtn = document.getElementById("jsSave");
 
 const INITIAL_COLOR = "#2c2c2c";
 const canvasWidth = canvas.offsetWidth;
@@ -18,6 +19,8 @@ const canvasHeight = canvas.offsetHeight;
 canvas.width = canvasWidth;
 canvas.height = canvasHeight;
 
+ctx.fillStyle = "white"; //canvas 배경색 초기 세팅
+ctx.fillRect(0, 0, canvasWidth, canvasHeight); //canvas 배경색 초기 세팅
 ctx.strokeStyle = INITIAL_COLOR; //그릴 선들의 색
 ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5; //선의 너비 = 선의 굵기
@@ -98,12 +101,26 @@ function resetBtn() {
   window.location.reload();
 }
 
+function handleCM(event) {
+  event.preventDefault();
+}
+
+function handleSaveClick() {
+  //HTMLCanvasElement.toDataURL() 메소드는 (기본적으로 PNG로 설정된) type parameter 에 의해 저장된 포맷의 이미지 표현을 포함한 data URL을 반환함.
+  const image = canvas.toDataURL();
+  const link = document.createElement("a");
+  link.href = image;
+  link.download = "PaintJS[🎨]";
+  link.click();
+}
+
 if (canvas) {
   canvas.addEventListener("mousemove", onMouseMove); //마우스 움직임 감지
   canvas.addEventListener("mousedown", startPainting); //마우스 클릭 감지 (마우스를 클릭하고 있을때)
   canvas.addEventListener("mouseup", stopPainting); //마우스 클릭 감지 (마우스를 클릭을 그만뒀을때)
   canvas.addEventListener("mouseleave", stopPainting); //마우스가 컨버스 영역을 벗어났을때 감지
-  canvas.addEventListener("click", handleCanvasClick);
+  canvas.addEventListener("click", handleCanvasClick); //마우스 클릭 이벤트
+  canvas.addEventListener("contextmenu", handleCM); //마우스 우클릭 이벤트
 }
 
 //Array.from 메소드는 object로부터 array를 만든다.
@@ -122,4 +139,8 @@ if (mode) {
 
 if (reset) {
   reset.addEventListener("click", resetBtn);
+}
+
+if (saveBtn) {
+  saveBtn.addEventListener("click", handleSaveClick);
 }
